@@ -18,3 +18,44 @@ resource "azurerm_search_service" "search" {
   replica_count       = var.replica_count
   partition_count     = var.partition_count
 }
+
+resource "azurerm_resource_group" "rg_rag" {
+  name     = "rg_rag"
+  location = "Sweden Central"
+}
+
+resource "azurerm_cognitive_account" "cognitive_account" {
+  name                = "cognitive_account"
+  location            = azurerm_resource_group.rg_rag.location
+  resource_group_name = azurerm_resource_group.rg_rag.name
+  kind                = "OpenAI"
+  sku_name            = "S0"
+}
+
+resource "azurerm_cognitive_deployment" "text-embedding" {
+  name                 = "text-embedding"
+  cognitive_account_id = azurerm_cognitive_account.cognitive_account.id
+  model {
+    format  = "OpenAI"
+    name    = "text-embedding-ada-002"
+    version = "2"
+  }
+
+  scale {
+    type = "Standard"
+  }
+}
+
+resource "azurerm_cognitive_deployment" "gpt3" {
+  name                 = "gpt-4o-mini"
+  cognitive_account_id = azurerm_cognitive_account.cognitive_account.id
+  model {
+    format  = "OpenAI"
+    name    = "gpt-35-turbo"
+    version = "1106"
+  }
+
+  scale {
+    type = "Standard"
+  }
+}
