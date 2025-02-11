@@ -1,4 +1,4 @@
-resource "azurerm_resource_group" "rg" {
+resource "azurerm_resource_group" "rg_rag" {
   name     = var.resource_group_name
   location = var.resource_group_location
 }
@@ -12,17 +12,14 @@ resource "random_string" "azurerm_search_service_name" {
 
 resource "azurerm_search_service" "search" {
   name                = random_string.azurerm_search_service_name.result
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg_rag.name
+  location            = azurerm_resource_group.rg_rag.location
   sku                 = var.sku
   replica_count       = var.replica_count
   partition_count     = var.partition_count
 }
 
-resource "azurerm_resource_group" "rg_rag" {
-  name     = "rg_rag"
-  location = "Sweden Central"
-}
+##### OpenAI models #####
 
 resource "azurerm_cognitive_account" "cognitive_account" {
   name                = "cognitive_account"
@@ -58,4 +55,15 @@ resource "azurerm_cognitive_deployment" "gpt3" {
   scale {
     type = "Standard"
   }
+}
+
+
+##### Form Recognizer #####
+
+resource "azurerm_cognitive_account" "document_intelligence" {
+  name                = "document_intelligence"
+  location            = azurerm_resource_group.rg_rag.location
+  resource_group_name = azurerm_resource_group.rg_rag.name
+  kind                = "FormRecognizer"
+  sku_name            = "S0"
 }
