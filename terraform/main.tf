@@ -61,7 +61,7 @@ resource "azurerm_cognitive_deployment" "gpt3" {
 ##### Form Recognizer #####
 
 resource "azurerm_cognitive_account" "document_intelligence" {
-  name                = "document_intelligence"
+  name                = "ocr"
   location            = azurerm_resource_group.rg_rag.location
   resource_group_name = azurerm_resource_group.rg_rag.name
   kind                = "FormRecognizer"
