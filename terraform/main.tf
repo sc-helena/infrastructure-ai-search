@@ -3,15 +3,8 @@ resource "azurerm_resource_group" "rg_rag" {
   location = var.resource_group_location
 }
 
-resource "random_string" "azurerm_search_service_name" {
-  length  = 25
-  upper   = false
-  numeric = false
-  special = false
-}
-
 resource "azurerm_search_service" "search" {
-  name                = random_string.azurerm_search_service_name.result
+  name                = var.search_service_name
   resource_group_name = azurerm_resource_group.rg_rag.name
   location            = azurerm_resource_group.rg_rag.location
   sku                 = var.sku
@@ -22,11 +15,11 @@ resource "azurerm_search_service" "search" {
 ##### OpenAI models #####
 
 resource "azurerm_cognitive_account" "cognitive_account" {
-  name                = "cognitive_account"
+  name                = var.cognitive_account_name
   location            = azurerm_resource_group.rg_rag.location
   resource_group_name = azurerm_resource_group.rg_rag.name
   kind                = "OpenAI"
-  sku_name            = "S0"
+  sku_name            = var.sku
 }
 
 resource "azurerm_cognitive_deployment" "text-embedding" {
@@ -39,7 +32,7 @@ resource "azurerm_cognitive_deployment" "text-embedding" {
   }
 
   scale {
-    type = "Standard"
+    type = var.scale
   }
 }
 
@@ -53,7 +46,7 @@ resource "azurerm_cognitive_deployment" "gpt3" {
   }
 
   scale {
-    type = "Standard"
+    type = var.scale
   }
 }
 
@@ -65,5 +58,5 @@ resource "azurerm_cognitive_account" "document_intelligence" {
   location            = azurerm_resource_group.rg_rag.location
   resource_group_name = azurerm_resource_group.rg_rag.name
   kind                = "FormRecognizer"
-  sku_name            = "S0"
+  sku_name            = var.sku
 }

@@ -10,14 +10,28 @@ variable "resource_group_name" {
   default     = "ai-search-cv-rg"
 }
 
+variable "search_service_name" {
+  type        = string
+  description = "Name of the search service."
+  default     = "ai-search-service"
+}
+
+variable "cognitive_account_name" {
+  type        = string
+  description = "Name of the cognitive account."
+  default     = "cognitive_account"
+}
+
 variable "sku" {
   description = "The pricing tier of the search service you want to create (for example, basic or standard)."
-  default     = "free"
+  default     = "S0"
   type        = string
-  validation {
-    condition     = contains(["free", "basic", "standard", "standard2", "standard3", "storage_optimized_l1", "storage_optimized_l2"], var.sku)
-    error_message = "The sku must be one of the following values: free, basic, standard, standard2, standard3, storage_optimized_l1, storage_optimized_l2."
-  }
+}
+
+variable "scale" {
+  description = "The pricing tier of the search service you want to create (for example, basic or standard)."
+  default     = "Standard"
+  type        = string
 }
 
 variable "replica_count" {
