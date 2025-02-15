@@ -22,7 +22,7 @@ variable "cognitive_account_name" {
   default     = "cognitive_account"
 }
 
-variable "sku" {
+variable "sku_name" {
   description = "The pricing tier of the search service you want to create (for example, basic or standard)."
   default     = "S0"
   type        = string

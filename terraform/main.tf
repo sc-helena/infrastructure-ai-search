@@ -7,7 +7,7 @@ resource "azurerm_search_service" "search" {
   name                = var.search_service_name
   resource_group_name = azurerm_resource_group.rg_rag.name
   location            = azurerm_resource_group.rg_rag.location
-  sku                 = var.sku
+  sku                 = "standard"
   replica_count       = var.replica_count
   partition_count     = var.partition_count
 }
@@ -19,7 +19,7 @@ resource "azurerm_cognitive_account" "cognitive_account" {
   location            = azurerm_resource_group.rg_rag.location
   resource_group_name = azurerm_resource_group.rg_rag.name
   kind                = "OpenAI"
-  sku_name            = var.sku
+  sku_name            = var.sku_name
 }
 
 resource "azurerm_cognitive_deployment" "text-embedding" {
@@ -58,5 +58,5 @@ resource "azurerm_cognitive_account" "document_intelligence" {
   location            = azurerm_resource_group.rg_rag.location
   resource_group_name = azurerm_resource_group.rg_rag.name
   kind                = "FormRecognizer"
-  sku_name            = var.sku
+  sku_name            = var.sku_name
 }
