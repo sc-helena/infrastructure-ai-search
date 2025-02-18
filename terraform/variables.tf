@@ -13,7 +13,7 @@ variable "resource_group_name" {
 variable "search_service_name" {
   type        = string
   description = "Name of the search service."
-  default     = "ai-search-service"
+  default     = "ai-search"
 }
 
 variable "cognitive_account_name" {
