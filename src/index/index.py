@@ -1,5 +1,5 @@
 from azure.core.credentials import AzureKeyCredential
-from azure.core.exceptions import ResourceExistsError
+from azure.core.exceptions import HttpResponseError
 from azure.search.documents.indexes import SearchIndexClient
 from azure.search.documents.indexes.models import (
     SimpleField,
@@ -37,6 +37,7 @@ def create_index():
                 searchable=True,
                 vector_search_dimensions=1536,
                 vector_search_profile_name="vector-config",
+                hidden=False
             ),
     ]
 
@@ -48,9 +49,10 @@ def create_index():
     # Create the search index
     index = SearchIndex(name=index_name, fields=fields, vector_search=vector_search)
     try: 
-        result = index_client.create_or_update_index(index)
-    except ResourceExistsError as e: 
-        index_client.delete_index(index)
-        result = index_client.create_or_update_index(index)
+        result = index_client.create_index(index)
+    except HttpResponseError as e:
+        if "ResourceNameAlreadyInUse" in e.message: 
+            index_client.delete_index(index)
+            result = index_client.create_index(index)
 
     print(f' {result.name} created')

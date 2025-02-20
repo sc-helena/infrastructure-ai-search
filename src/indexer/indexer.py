@@ -13,9 +13,9 @@ def _create_index_entries(splitted_texts, filename):
 
         index_mask = {
             "id": str(uuid.uuid4()),
-            "embeddedContent": get_embedding(splitted_text),
             "content": splitted_text,
-            "filename": filename
+            "filename": filename,
+            "embeddedContent": get_embedding(splitted_text),
         }
 
         documents.append(index_mask)
